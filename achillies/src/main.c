@@ -27,6 +27,40 @@ bool argument_exists(int argc, char *argv[], const char *flag)
     return false;
 }
 
+void display_dfu_command_examples(char *executablePath) {
+    printf("\n----------------------------------------------------------------------\n");
+    printf("DFU Device Detected! Here are some common command examples:\n");
+    printf("----------------------------------------------------------------------\n\n");
+
+    printf("Tip: Organize your PongoOS files (e.g., Pongo.bin, checkra1n-kpf-pongo, ramdisk.dmg) in a known location.\n");
+    printf("For example, create a directory like './pongo_files/'\n\n");
+
+    printf("1. Boot PongoOS (minimal, using default PongoOS if available or specify with -k):\n");
+    printf("   %s -p\n", executablePath);
+    printf("   %s -p -k ./pongo_files/Pongo.bin\n\n", executablePath);
+
+    printf("2. Jailbreak with a Kernel Patch Finder (KPF), Ramdisk, and Overlay:\n");
+    printf("   (Replace file names with your actual files)\n");
+    printf("   %s -j -K ./pongo_files/checkra1n-kpf-pongo -R ./pongo_files/ramdisk.dmg -O ./pongo_files/overlay.dmg\n\n", executablePath);
+
+    printf("3. Boot a custom Ramdisk and Overlay (without full jailbreak, e.g., for custom tools):\n");
+    printf("   %s -K ./pongo_files/checkra1n-kpf-pongo -R ./pongo_files/rootedramdisk.dmg -O ./pongo_files/overlay.dmg\n", executablePath);
+    printf("   (Note: '-K' might be needed if the ramdisk requires a patched kernel to boot)\n\n");
+
+    printf("4. Boot PongoOS with specific boot arguments:\n");
+    printf("   %s -p -b \"example_arg=1 another_arg=test\"\n\n", executablePath);
+
+    printf("5. Use a specific PongoOS image and then start a PongoOS shell:\n");
+    printf("   %s -T -k ./pongo_files/PongoConsolidated.bin\n\n", executablePath);
+
+    printf("6. Remove signature checks (if supported by the exploit for your device):\n");
+    printf("   %s -s\n\n", executablePath);
+
+    printf("Remember to replace placeholder paths like './pongo_files/' and filenames with your actual file paths.\n");
+    printf("You can also specify a device by UDID using the -u <UDID> option if multiple devices are connected.\n");
+    printf("----------------------------------------------------------------------\n\n");
+}
+
 void print_usage(char *executablePath) {
     printf("Options:\n");
     printf("\t-d - enable debug logging\n");
@@ -154,7 +188,7 @@ int main(int argc, char *argv[]) {
     if (args.pongoterm) {
         pongoterm();
     } else {
-        checkm8((args.bootToPongo || args.jailbreak) ? MODE_PONGOOS : MODE_CHECKM8);
+        checkm8((args.bootToPongo || args.jailbreak) ? MODE_PONGOOS : MODE_CHECKM8, argv[0]);
     }
 
     return 0;
